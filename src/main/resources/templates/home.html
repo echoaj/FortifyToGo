@@ -3,7 +3,6 @@
 <head>
     <meta charset="UTF-8">
     <title>Welcome to Fortify-to-Go</title>
-    <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
     <style>
@@ -19,16 +18,34 @@
 <body>
     <div class="container text-center">
         <h1>Welcome to Fortify-to-Go</h1>
+    </div>
+
+    <div class="container text-center">
         <p>Enter your GitHub repo link below to generate a Fortify report.</p>
+        <form action="/selectBranch" method="post">
+            <div class="input-group mb-3">
+                <input type="text" class="form-control" placeholder="Enter GitHub link" name="repoURL" required>
+                <div class="input-group-append">
+                    <button class="btn btn-dark" type="submit">Submit</button>
+                </div>
+            </div>
+        </form>
+    </div>
+
+    <div class="container text-center">
+        <p>Select the branch to scan.</p>
         <form action="/generateReport" method="post">
             <div class="input-group mb-3">
-                <input type="text" class="form-control" placeholder="Enter GitHub link" name="githubLink" required>
+                <select class="form-control" name="branch">
+                    <option th:each="branch : ${repoBranches}" th:value="${branch}" th:text="${branch}"></option>
+                </select>
                 <div class="input-group-append">
                     <button class="btn btn-dark" type="submit">Generate Report</button>
                 </div>
             </div>
         </form>
     </div>
+
     <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
 </body>
