@@ -4,52 +4,99 @@
     <meta charset="UTF-8">
     <title>Welcome to Fortify-to-Go</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-4bw+/aepP/YC94hEpVNVgiZdgIC5+VKNBQNGCHeKRQN+PtmoHDEXuppvnDJzQIu9" crossorigin="anonymous">
     <style>
+
+        :root {
+            --dark-blue: #16425b;
+            --beige: #d9dcd6;
+            --light-blue: #3a7ca5;
+            --very-dark-blue: #2C3E50;
+            --vary-dark-blue-dim: #34495E;
+        }
+
         body {
-            background-color: #E2F1A0;
-            color: #000;
+            font-family: 'Roboto', sans-serif;
+            background-color: var(--dark-blue);
+            color: var(--beige);
+            margin: 0;
+            padding: 0;
         }
+
         .container {
-            margin-top: 10%;
+            max-width: 900px;
+            margin: 5% auto;
+            padding: 30px 30px;
+            background-color: var(--light-blue);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            border-radius: 10px;
         }
+
+        h1 {
+            font-size: 2em;
+            margin-bottom: 20px;
+        }
+
+        p {
+            font-size: 1em;
+            text-align: left;
+        }
+
+        .form-control {
+            padding-right: 80px;  /* To avoid overlap of button and input text */
+        }
+
+        .btn {
+            background-color: var(--very-dark-blue);  /* Dark blue color */
+            color: #EAECEE;  /* Light grey color */
+        }
+
+        .btn:hover {
+            background-color: var(--vary-dark-blue-dim);  /* Slightly darker blue on hover */
+        }
+
     </style>
 </head>
 <body>
-    <div class="container text-center">
+    <div class="container text-center px-5">
         <h1>Welcome to Fortify-to-Go</h1>
-    </div>
 
-    <div class="container text-center">
-        <p>Enter your GitHub repo link below to generate a Fortify report.</p>
-        <form action="/selectBranch" method="post" id="repoForm">
-            <div class="input-group mb-3">
-                <input type="text" class="form-control" placeholder="Enter GitHub link" name="repoURL" id="repoURL" required>
-                <div class="input-group-append">
-                    <button class="btn btn-dark" type="submit">Submit</button>
+        <div>
+            <form action="/selectBranch" method="post" id="repoForm">
+                <div class="input-group mb-3 py-3">
+                    <input type="text" class="form-control" placeholder="Enter GitHub link" name="repoURL" id="repoURL" required>
+                    <div class="input-group-append">
+                        <button class="btn btn-dark" type="submit">Submit</button>
+                    </div>
                 </div>
-            </div>
-        </form>
-    </div>
+            </form>
+        </div>
 
-    <div class="container text-center" id="reportForm" style="display: none;">
-        <p>Select the branch to scan.</p>
-        <form action="/generateReport" method="post">
-            <div class="input-group mb-3">
-                <select id="branchMenu" class="form-control" name="branch">
-
-                </select>
-                <div class="input-group-append">
-                    <button class="btn btn-dark" type="submit">Generate Report</button>
+        <div id="reportForm" style="display: none;">
+            <form action="/generateReport" method="post">
+                <div class="input-group mb-3 py-3">
+                    <select id="branchMenu" class="form-control" name="branch">
+                        <option value="" disabled selected>Select a branch</option>
+                    </select>
+                    <div class="input-group-append">
+                        <button class="btn btn-dark" type="submit" id="generateButton" disabled>Generate Report</button>
+                    </div>
                 </div>
-            </div>
-        </form>
+            </form>
+        </div>
     </div>
-
-    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
 
     <script>
+        document.getElementById('branchMenu').addEventListener('change', function() {
+            const generateButton = document.getElementById('generateButton');
+            if (this.value === "") { // If "Select a branch" option is chosen
+                generateButton.disabled = true;
+            } else {
+                generateButton.disabled = false;
+            }
+        });
+
         document.getElementById('repoForm').addEventListener('submit', function(event) {
             event.preventDefault();  // Prevent default form submission
             var repoURL = document.getElementById('repoURL').value;
@@ -70,8 +117,9 @@
                     return response.json();
                 })
                 .then(data => {
+                    // Reset the dropdown to just the "Select a branch" option
                     var select = document.getElementById('branchMenu');
-                    select.innerHTML = '';  // Clear previous options
+                    select.innerHTML = '<option value="" disabled selected>Select a branch</option>';
 
                     data.forEach(branch => {
                         var option = document.createElement('option');
@@ -87,6 +135,13 @@
             }
         });
     </script>
+
+    <script src="https://code.jquery.com/jquery-3.7.0.slim.js"
+            integrity="sha256-7GO+jepT9gJe9LB4XFf8snVOjX3iYNb0FHYr5LI1N5c="
+            crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js"
+            integrity="sha384-HwwvtgBNo3bZJJLYd8oVXjrBZt8cqVSpeBNS5n7C8IVInixGAoxmnlMuBnhbgrkm"
+            crossorigin="anonymous"></script>
 
 </body>
 </html>

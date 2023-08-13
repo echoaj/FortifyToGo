@@ -4,18 +4,11 @@ import com.ng.fortifytogo.services.GitService;
 import jakarta.servlet.http.HttpSession;
 import org.eclipse.jgit.api.errors.GitAPIException;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.server.ResponseStatusException;
-
-import java.util.List;
-import java.util.Map;
 
 @Controller
 public class WebController {
@@ -35,10 +28,26 @@ public class WebController {
         System.out.println("This IS THE BRANCH YOU SELECTED!!!");
         System.out.println(branch);
         String repoURL = (String) session.getAttribute("repoURL");
-        String localRepoPath = gitService.cloneRepository(repoURL, branch, "C:\\Users\\aljos\\OneDrive\\Desktop\\TestRepo");
-        System.out.println(localRepoPath);
+        session.setAttribute("branch", branch);
+//        String localRepoPath = gitService.cloneRepository(repoURL, branch, "C:\\Users\\aljos\\OneDrive\\Desktop\\TestRepo");
+//        System.out.println(localRepoPath);
         model.addAttribute("repoURL", repoURL);
         model.addAttribute("branch", branch);
+        return "report";
+    }
+
+    @GetMapping(path="/generateReport")
+    public String showReport(Model model) {
+        String repoURL = (String) session.getAttribute("repoURL");
+        String branch = (String) session.getAttribute("branch");
+
+        if (repoURL == null || branch == null) {
+            return "redirect:/";  // Redirect to home if the data is not in session
+        }
+
+        model.addAttribute("repoURL", repoURL);
+        model.addAttribute("branch", branch);
+
         return "report";
     }
 

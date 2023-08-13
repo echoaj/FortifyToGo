@@ -7,21 +7,58 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
     <style>
+        :root {
+            --dark-blue: #16425b;
+            --beige: #d9dcd6;
+            --light-blue: #3a7ca5;
+            --very-dark-blue: #2C3E50;
+            --vary-dark-blue-dim: #34495E;
+        }
+
         body {
-            background-color: #E2F1A0;
-            color: #000;
+            font-family: 'Roboto', sans-serif;
+            background-color: var(--dark-blue);
+            color: var(--beige);
+            margin: 0;
+            padding: 0;
         }
         .container {
-            margin-top: 10%;
+            margin-top: 7%;
         }
+
+        .back-button {
+            position: absolute;
+            top: 40px;
+            left: 40px;
+            display: flex;
+            align-items: center;
+            color: var(--beige);
+            border: none;
+            border-radius: 5px;
+            padding: 5px 15px;
+            font-size: 16px;
+            cursor: pointer;
+            text-decoration: none;
+        }
+
+        .back-button:before {
+            content: '←'; /* Unicode arrow character */
+            margin-right: 10px;
+        }
+
+        .btn {
+            background-color: var(--light-blue);  /* Dark blue color */
+            color: #EAECEE;  /* Light grey color */
+        }
+
     </style>
 </head>
 <body>
+    <a href="/" class="btn btn-dark back-button" >Back</a>
+
     <div class="container text-center">
-        <h1>Your Fortify Report</h1>
-        <p>Here is your Fortify report generated from the GitHub link provided:</p>
-        <p>Repo URL: <a th:href="@{${repoURL} + '/tree/' + ${branch}}" th:text="${repoURL} + '/tree/' + ${branch}"></a></p>
-<!--        <p>Branch: <a th:href="${branch}" th:text="${branch}"></a></p>-->
+        <h1 class="my-3">Your Fortify Report</h1>
+        <a th:href="@{${repoURL} + '/tree/' + ${branch}}" th:text="${repoURL} + '/tree/' + ${branch}"></a>
         <div id="report" class="text-left">
             <!-- The report will be populated here -->
         </div>
