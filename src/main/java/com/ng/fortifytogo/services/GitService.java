@@ -16,9 +16,10 @@ import java.util.List;
 @Service
 public class GitService {
 
-    public String cloneRepository(String repoUrl, String destinationDir) throws GitAPIException {
+    public String cloneRepository(String repoUrl, String branch, String destinationDir) throws GitAPIException {
         try (Git git = Git.cloneRepository()
                 .setURI(repoUrl)
+                .setBranch(branch)
                 .setDirectory(new File(destinationDir))
                 .call()) {
             return git.getRepository().getDirectory().getAbsolutePath();

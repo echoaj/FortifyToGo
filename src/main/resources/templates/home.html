@@ -22,9 +22,9 @@
 
     <div class="container text-center">
         <p>Enter your GitHub repo link below to generate a Fortify report.</p>
-        <form action="/selectBranch" method="post">
+        <form action="/selectBranch" method="post" id="repoForm">
             <div class="input-group mb-3">
-                <input type="text" class="form-control" placeholder="Enter GitHub link" name="repoURL" required>
+                <input type="text" class="form-control" placeholder="Enter GitHub link" name="repoURL" id="repoURL" required>
                 <div class="input-group-append">
                     <button class="btn btn-dark" type="submit">Submit</button>
                 </div>
@@ -32,12 +32,12 @@
         </form>
     </div>
 
-    <div class="container text-center">
+    <div class="container text-center" id="reportForm" style="display: none;">
         <p>Select the branch to scan.</p>
         <form action="/generateReport" method="post">
             <div class="input-group mb-3">
-                <select class="form-control" name="branch">
-                    <option th:each="branch : ${repoBranches}" th:value="${branch}" th:text="${branch}"></option>
+                <select id="branchMenu" class="form-control" name="branch">
+
                 </select>
                 <div class="input-group-append">
                     <button class="btn btn-dark" type="submit">Generate Report</button>
@@ -48,5 +48,45 @@
 
     <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+
+    <script>
+        document.getElementById('repoForm').addEventListener('submit', function(event) {
+            event.preventDefault();  // Prevent default form submission
+            var repoURL = document.getElementById('repoURL').value;
+
+            if (repoURL.trim() !== '') {
+                console.log("fetching /selectBranch");
+                fetch('/selectBranch', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ repoURL: repoURL })
+                })
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok');
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    var select = document.getElementById('branchMenu');
+                    select.innerHTML = '';  // Clear previous options
+
+                    data.forEach(branch => {
+                        var option = document.createElement('option');
+                        option.value = branch;
+                        option.textContent = branch;
+                        select.appendChild(option);
+                    });
+
+                    // Show the form after populating the dropdown
+                    document.getElementById('reportForm').style.display = 'block';
+                })
+                .catch(error => console.error('Error fetching branches:', error));
+            }
+        });
+    </script>
+
 </body>
 </html>
