@@ -30,4 +30,20 @@ public class GitService {
         }
         return branches;
     }
+
+    public String getRepoName(String repoUrl) {
+        if (repoUrl == null || repoUrl.isEmpty()) {
+            return null;
+        }
+
+        // Remove trailing slashes
+        repoUrl = repoUrl.endsWith("/") ? repoUrl.substring(0, repoUrl.length() - 1) : repoUrl;
+        // Remove ".git" if present
+        repoUrl = repoUrl.endsWith(".git") ? repoUrl.substring(0, repoUrl.length() - 4) : repoUrl;
+
+        // Split the URL by slashes and get the last part
+        String[] parts = repoUrl.split("/");
+        return parts.length > 0 ? parts[parts.length - 1] : null;
+    }
+
 }

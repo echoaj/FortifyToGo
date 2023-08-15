@@ -24,15 +24,23 @@ public class WebController {
     }
 
     @PostMapping(path="/generateReport")
-    public String generateReport(@RequestParam String branch, Model model) throws GitAPIException {
-        System.out.println("This IS THE BRANCH YOU SELECTED!!!");
-        System.out.println(branch);
+    public String generateReport(@RequestParam String branch, @RequestParam String repoName, @RequestParam String versionNumber, Model model) throws GitAPIException {
+        System.out.println("Branch: " + branch);
+        System.out.println("Repo: " + repoName);
+        System.out.println("Version: " + versionNumber);
+
         String repoURL = (String) session.getAttribute("repoURL");
         session.setAttribute("branch", branch);
 //        String localRepoPath = gitService.cloneRepository(repoURL, branch, "C:\\Users\\aljos\\OneDrive\\Desktop\\TestRepo");
 //        System.out.println(localRepoPath);
+        if (repoName.isEmpty())
+            repoName = gitService.getRepoName(repoURL);
+
         model.addAttribute("repoURL", repoURL);
         model.addAttribute("branch", branch);
+        model.addAttribute("repoName", repoName);
+        model.addAttribute("repoVersion", versionNumber);
+
         return "report";
     }
 
