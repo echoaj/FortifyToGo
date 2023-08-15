@@ -52,3 +52,6 @@ public class WebController {
     }
 
 }
+// TODO: Loading icon
+// TODO: Report download, view
+// TODO: Combine to one page
