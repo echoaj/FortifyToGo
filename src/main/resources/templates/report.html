@@ -8,66 +8,48 @@
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
     <style>
         :root {
-            --dark-blue: #16425b;
-            --beige: #d9dcd6;
-            --light-blue: #3a7ca5;
-            --very-dark-blue: #2C3E50;
-            --vary-dark-blue-dim: #34495E;
-        }
+           --dark-blue: #16425b;
+           --beige: #d9dcd6;
+           --light-blue: #3a7ca5;
+           --very-dark-blue: #2C3E50;
+           --vary-dark-blue-dim: #34495E;
+       }
 
-        body {
-            font-family: 'Roboto', sans-serif;
-            background-color: var(--dark-blue);
-            color: var(--beige);
-            margin: 0;
-            padding: 0;
-        }
-        .container {
-            margin-top: 7%;
-        }
+       body {
+           background-color: var(--dark-blue);
+           color: var(--beige);
+       }
 
-        .back-button {
-            position: absolute;
-            top: 40px;
-            left: 40px;
-            display: flex;
-            align-items: center;
-            color: var(--beige);
-            border: none;
-            border-radius: 5px;
-            padding: 5px 15px;
-            font-size: 16px;
-            cursor: pointer;
-            text-decoration: none;
-        }
+       .back-button {
+           top: 40px;
+           left: 40px;
+           display: flex;
+           align-items: center;
+           color: var(--beige);
+           font-size: 16px;
+       }
 
-        .back-button:before {
-            content: '←'; /* Unicode arrow character */
-            margin-right: 10px;
-        }
-
-        .btn {
-            background-color: var(--light-blue);  /* Dark blue color */
-            color: #EAECEE;  /* Light grey color */
-        }
+       .btn {
+           background-color: var(--light-blue);  /* Dark blue color */
+       }
 
     </style>
 </head>
-<body>
-    <a href="/" class="btn btn-dark back-button" >Back</a>
+<body class="font-family-roboto">
+    <a href="/" class="btn btn-custom position-absolute back-button border-0 rounded cursor-pointer text-decoration-none">← Back</a>
 
-    <div class="container text-center">
+    <div class="container text-center mt-5">
         <h1 class="my-3">Fortify Report</h1>
         <p th:text="${repoName} + ' ' + ${repoVersion}"></p>
         <a th:href="@{${repoURL} + '/tree/' + ${branch}}" th:text="${repoURL} + '/tree/' + ${branch}"></a>
 
         <div id="report" class="my-3">
-            <iframe src="http://localhost:8080/alex_resume.pdf" width="100%" height="600px">
+            <iframe src="http://localhost:8080/alex_resume.pdf" width="100%" height="600px" class="border-0">
                 If you can't view the content, please <a href="http://localhost:8080/alex_resume.pdf" target="_blank">click here</a> to download the PDF.
             </iframe>
-
         </div>
     </div>
+
     <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
 </body>
