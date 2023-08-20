@@ -25,17 +25,21 @@ public class WebController {
 
     @PostMapping(path="/generateReport")
     public String generateReport(@RequestParam String branch, @RequestParam String repoName, @RequestParam String versionNumber, Model model) throws GitAPIException {
+        String repoURL = (String) session.getAttribute("repoURL");
+        String repoPath = "C:\\Users\\aljos\\OneDrive\\Desktop\\";
+        repoName = repoName.isEmpty() ? gitService.getRepoName(repoURL) : repoName;
+        repoPath += repoName;
+
+        String statusMessage = gitService.cloneRepository(repoURL, branch, repoPath);
+
         System.out.println("Branch: " + branch);
         System.out.println("Repo: " + repoName);
         System.out.println("Version: " + versionNumber);
+        System.out.println(statusMessage);
 
-        String repoURL = (String) session.getAttribute("repoURL");
         session.setAttribute("branch", branch);
-//        String localRepoPath = gitService.cloneRepository(repoURL, branch, "C:\\Users\\aljos\\OneDrive\\Desktop\\TestRepo");
-//        System.out.println(localRepoPath);
-        if (repoName.isEmpty())
-            repoName = gitService.getRepoName(repoURL);
-
+        session.setAttribute("repoName", repoName);
+        session.setAttribute("repoVersion", versionNumber);
         model.addAttribute("repoURL", repoURL);
         model.addAttribute("branch", branch);
         model.addAttribute("repoName", repoName);
@@ -48,6 +52,8 @@ public class WebController {
     public String showReport(Model model) {
         String repoURL = (String) session.getAttribute("repoURL");
         String branch = (String) session.getAttribute("branch");
+        String repoName = (String) session.getAttribute("repoName");
+        String repoVersion = (String) session.getAttribute("repoVersion");
 
         if (repoURL == null || branch == null) {
             return "redirect:/";  // Redirect to home if the data is not in session
@@ -55,11 +61,11 @@ public class WebController {
 
         model.addAttribute("repoURL", repoURL);
         model.addAttribute("branch", branch);
+        model.addAttribute("repoName", repoName);
+        model.addAttribute("repoVersion", repoVersion);
 
         return "report";
     }
 
 }
 // TODO: Loading icon
-// TODO: Report download, view
-// TODO: Combine to one page

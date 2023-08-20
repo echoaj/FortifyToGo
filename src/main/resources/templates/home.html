@@ -76,9 +76,19 @@
                 <button class="btn btn-dark" type="submit" id="generateButton" disabled>Generate Report</button>
             </form>
         </div>
+
+        <div id="loading" style="display: none;">
+            <p>Loading ...</p>
+        </div>
     </div>
 
     <script>
+        document.getElementById('reportForm').addEventListener('submit', function(event) {
+            var delayInMilliseconds = 1000; //1 second
+            setTimeout(function() {}, delayInMilliseconds);
+            document.getElementById('loading').style.display = 'block';
+        });
+
         document.getElementById('repoForm').addEventListener('submit', function(event) {
             event.preventDefault();  // Prevent default form submission
 

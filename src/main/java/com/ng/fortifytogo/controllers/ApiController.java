@@ -26,8 +26,8 @@ public class ApiController {
         // If you want to print for debugging
         System.out.println("Printing out branches");
         System.out.println(repoURL);
-        for (String b: branches){
-            System.out.println(b);
+        for (String branch: branches){
+            System.out.println(branch);
         }
 
         System.out.println("Total Branches:" + branches.size());

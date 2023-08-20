@@ -3,8 +3,11 @@ package com.ng.fortifytogo.services;
 import org.eclipse.jgit.api.Git;
 import org.eclipse.jgit.api.errors.GitAPIException;
 import org.eclipse.jgit.lib.Ref;
+import org.eclipse.jgit.lib.Repository;
+import org.eclipse.jgit.storage.file.FileRepositoryBuilder;
 import org.springframework.stereotype.Service;
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -18,7 +21,9 @@ public class GitService {
                 .setBranch(branch)
                 .setDirectory(new File(destinationDir))
                 .call()) {
-            return git.getRepository().getDirectory().getAbsolutePath();
+            return "Repository cloned successfully to: " + git.getRepository().getDirectory().getAbsolutePath();
+        } catch (GitAPIException e) {
+            return "Error cloning repository: " + e.getMessage();
         }
     }
 
