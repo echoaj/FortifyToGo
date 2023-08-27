@@ -20,6 +20,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.Map;
 
 @Controller
 public class WebController {
@@ -44,6 +45,7 @@ public class WebController {
 
         String gitStatusMessage = gitService.cloneRepository(repoURL, branch, repoPath);
         System.out.println(gitStatusMessage);
+        gitService.languages(repoPath);
         String reportName = fortService.scan(repoName, versionNumber, repoPath);
 
         System.out.println("Branch: " + branch);
@@ -55,11 +57,13 @@ public class WebController {
         session.setAttribute("repoName", repoName);
         session.setAttribute("repoVersion", versionNumber);
         session.setAttribute("reportName", reportName);
+        session.setAttribute("langMap", gitService.fileCounts);
         model.addAttribute("repoURL", repoURL);
         model.addAttribute("branch", branch);
         model.addAttribute("repoName", repoName);
         model.addAttribute("repoVersion", versionNumber);
         model.addAttribute("reportName", reportName);
+        model.addAttribute("langMap", gitService.fileCounts);
 
         return "report";
     }
@@ -82,6 +86,7 @@ public class WebController {
         String repoName = (String) session.getAttribute("repoName");
         String repoVersion = (String) session.getAttribute("repoVersion");
         String reportName = (String) session.getAttribute("reportName");
+        Map<String, Integer> fileCounts = (Map<String, Integer>) session.getAttribute("langMap");
 
         if (repoURL == null || branch == null) {
             return "redirect:/";  // Redirect to home if the data is not in session
@@ -92,6 +97,7 @@ public class WebController {
         model.addAttribute("repoName", repoName);
         model.addAttribute("repoVersion", repoVersion);
         model.addAttribute("reportName", reportName);
+        model.addAttribute("langMap", fileCounts);
 
         return "report";
     }

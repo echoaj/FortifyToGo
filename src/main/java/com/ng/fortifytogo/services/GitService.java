@@ -3,17 +3,25 @@ package com.ng.fortifytogo.services;
 import org.eclipse.jgit.api.Git;
 import org.eclipse.jgit.api.errors.GitAPIException;
 import org.eclipse.jgit.lib.Ref;
-import org.eclipse.jgit.lib.Repository;
-import org.eclipse.jgit.storage.file.FileRepositoryBuilder;
 import org.springframework.stereotype.Service;
 import java.io.File;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
+import java.util.*;
 
 @Service
 public class GitService {
+
+    public Map<String, Integer> fileCounts = new HashMap<>(Map.of(
+            "java", 0,
+            "py", 0,
+            "js", 0,
+            "ts", 0,
+            "go", 0,
+            "php", 0,
+            "rb", 0,
+            "cs", 0,
+            "c", 0,
+            "cpp", 0
+    ));
 
     public String cloneRepository(String repoUrl, String branch, String destinationDir) throws GitAPIException {
         try (Git git = Git.cloneRepository()
@@ -24,6 +32,39 @@ public class GitService {
             return "Repository cloned successfully to: " + git.getRepository().getDirectory().getAbsolutePath();
         } catch (GitAPIException e) {
             return "Error cloning repository: " + e.getMessage();
+        }
+    }
+
+    public void languages(String repoPath) {
+        File repo = new File(repoPath);
+        if (!repo.exists()) {
+            System.out.println("Repository does not exist.");
+            return;
+        }
+        countFiles(repo);
+        System.out.println(fileCounts);
+    }
+
+    private void countFiles(File file) {
+        if (file.isDirectory()) {
+            File[] files = file.listFiles();
+            assert files != null;
+            for (File f : files) {
+                countFiles(f);
+            }
+        } else {
+            String fileName = file.getName();
+            String extension = "";
+
+            int i = fileName.lastIndexOf('.');
+            if (i > 0) {
+                extension = fileName.substring(i + 1);
+            }
+
+            if (fileCounts.containsKey(extension)) {
+                int count = fileCounts.get(extension);
+                fileCounts.put(extension, count + 1);
+            }
         }
     }
 

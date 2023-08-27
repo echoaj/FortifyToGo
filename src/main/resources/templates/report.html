@@ -12,7 +12,7 @@
            --beige: #d9dcd6;
            --light-blue: #3a7ca5;
            --very-dark-blue: #2C3E50;
-           --vary-dark-blue-dim: #34495E;
+           --very-dark-blue-dim: #34495E;
        }
 
        body {
@@ -32,6 +32,12 @@
        .btn {
            background-color: var(--light-blue);  /* Dark blue color */
        }
+       .bubble {
+            border-radius: 50%;
+            background-color: red;
+            color: white;
+            font-weight: bold;
+        }
 
     </style>
 </head>
@@ -40,7 +46,20 @@
 
     <div class="container text-center mt-5">
         <h1 class="my-3">Fortify Report</h1>
-        <p th:text="${repoName + ' ' + repoVersion}"></p>
+
+        <h3 th:text="${repoName + ' ' + repoVersion}"></h3>
+
+        <div class="container my-3">
+            <div class="row">
+                <div class="col-sm-12">
+                    <p>Languages Detected</p>
+                    <span th:each="entry : ${langMap.entrySet()}" class="badge p-2 mr-3 mb-3" style="background-color: var(--very-dark-blue-dim)">
+                        <span th:text="${entry.key} + ': ' + ${entry.value}"></span>
+                    </span>
+                </div>
+            </div>
+        </div>
+
         <a th:href="@{${repoURL} + '/tree/' + ${branch}}" th:text="${repoURL} + '/tree/' + ${branch}"></a>
 
         <div id="report" class="my-3">
